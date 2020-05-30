@@ -25,7 +25,7 @@ class NoteDetailFragment: Fragment() {
         )
         binding.setLifecycleOwner(viewLifecycleOwner)
 
-        val note = NoteDetailFragmentArgs.fromBundle(arguments!!).selectedNote
+        val note = NoteDetailFragmentArgs.fromBundle(arguments!!).selectedNoteId
         val viewModel = ViewModelProviders.of(this, NoteDetailViewModel.Factory(note, application))
             .get(NoteDetailViewModel::class.java)
 

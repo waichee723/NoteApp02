@@ -30,12 +30,12 @@ class NoteListFragment: Fragment() {
             false
         )
 
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
         binding.noteRecyclerView.adapter = NoteListAdapter()
 
-        viewModel.navigateToNoteDetail.observe(this, Observer {
+        viewModel.navigateToNoteDetail.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 this.findNavController().navigate(NoteListFragmentDirections.actionNoteListFragmentToNoteDetailFragment(it))
                 viewModel.doneNavigateToDetail()

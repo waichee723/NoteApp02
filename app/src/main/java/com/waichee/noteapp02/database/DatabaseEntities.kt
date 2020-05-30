@@ -5,11 +5,11 @@ import androidx.room.PrimaryKey
 import com.waichee.noteapp02.domain.Note
 
 @Entity(tableName = "notes_table")
-data class DatabaseNote constructor(
+data class DatabaseNote(
     @PrimaryKey(autoGenerate = true)
-    var id: Long? = 0L,
-    var title: String? = "TITLE",
-    var body: String? = "BODY"
+    var id: Int = 0,
+    var title: String = "TITLE",
+    var body: String = "BODY"
 )
 
 fun List<DatabaseNote>.asDomainModel(): List<Note> {
@@ -20,4 +20,12 @@ fun List<DatabaseNote>.asDomainModel(): List<Note> {
             body = it.body
         )
     }
+}
+
+fun DatabaseNote.asDomainModel(): Note {
+    return Note(
+        id = id,
+        title = title,
+        body = body
+    )
 }

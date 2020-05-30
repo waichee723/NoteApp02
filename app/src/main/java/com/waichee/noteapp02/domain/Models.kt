@@ -2,13 +2,14 @@ package com.waichee.noteapp02.domain
 
 import android.os.Parcelable
 import com.waichee.noteapp02.database.DatabaseNote
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Note (
-    var id: Long?,
-    var title: String?,
-    var body: String?
+    var title: String,
+    var body: String,
+    var id: Int
 ) : Parcelable
 
 fun Note.asDatabaseNote(): DatabaseNote {

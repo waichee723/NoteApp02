@@ -11,10 +11,13 @@ interface NoteDao {
     fun getNotes(): LiveData<List<DatabaseNote>>
 
     @Insert
-    fun insert(databaseNote: DatabaseNote)
+    fun insert(databaseNote: DatabaseNote): Long
 
     @Update
     fun update(databaseNote: DatabaseNote)
+
+    @Query("SELECT * from notes_table WHERE id = :key")
+    fun get(key: Long): Note?
 }
 
 @Database(entities = [DatabaseNote::class], version = 1, exportSchema = false)
@@ -29,7 +32,7 @@ fun getDatabase(context: Context): NotesDatabase {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
             NotesDatabase::class.java,
-            "notes").build()
+            "notes_table").build()
         }
     }
     return INSTANCE

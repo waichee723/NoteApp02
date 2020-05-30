@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.waichee.noteapp02.database.DatabaseNote
 import com.waichee.noteapp02.database.NoteDao
+import com.waichee.noteapp02.database.asDomainModel
 import com.waichee.noteapp02.database.getDatabase
 import com.waichee.noteapp02.domain.Note
 import com.waichee.noteapp02.repository.NotesRepository
@@ -28,19 +29,19 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _navigateToNoteDetail = MutableLiveData<Note?>()
-    val navigateToNoteDetail: LiveData<Note?>
+    private val _navigateToNoteDetail = MutableLiveData<Long?>()
+    val navigateToNoteDetail: LiveData<Long?>
         get() = _navigateToNoteDetail
 
 
 
     fun onNewNote() {
         viewModelScope.launch {
-            val newNote = Note(title = "TITLE", body = "BODY", id = null)
-            notesRepository.createNewNote(newNote)
-            Timber.i("New note created")
+            val newNote = DatabaseNote()
+            val newNoteId = notesRepository.createNewNote(newNote)
+            Timber.i("New note created, id = %d, title = %s, body = %s", newNoteId, newNote.title, newNote.body)
 
-            _navigateToNoteDetail.value = newNote
+            _navigateToNoteDetail.value = newNoteId
         }
     }
 

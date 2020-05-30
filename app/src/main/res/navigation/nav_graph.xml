@@ -20,8 +20,8 @@
         android:label="NoteDetailFragment"
         tool:layout="@layout/fragment_note_detail">
         <argument
-            android:name="selectedNote"
-            app:argType="com.waichee.noteapp02.domain.Note"/>
+            android:name="selectedNoteId"
+            app:argType="long"/>
         <action
             android:id="@+id/action_noteDetailFragment_to_noteListFragment"
             app:destination="@id/noteListFragment" />

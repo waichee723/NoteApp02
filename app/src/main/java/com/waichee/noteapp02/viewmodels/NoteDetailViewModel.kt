@@ -9,10 +9,12 @@ import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.waichee.noteapp02.database.getDatabase
 import com.waichee.noteapp02.domain.Note
+import com.waichee.noteapp02.domain.asDatabaseNote
 import com.waichee.noteapp02.repository.NotesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,28 +24,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.lang.IllegalArgumentException
 
-class NoteDetailViewModel(note: Note, application: Application) : AndroidViewModel(application), Observable {
-
-
-    private val callbacks: PropertyChangeRegistry = PropertyChangeRegistry()
-
-    override fun addOnPropertyChangedCallback(
-        callback: OnPropertyChangedCallback) {
-        callbacks.add(callback)
-    }
-
-    override fun removeOnPropertyChangedCallback(
-        callback: OnPropertyChangedCallback) {
-        callbacks.remove(callback)
-    }
-
-    /**
-     * Notifies observers that all properties of this instance have changed.
-     */
-    fun notifyChange() {
-        callbacks.notifyCallbacks(this, 0, null)
-    }
-
+class NoteDetailViewModel(noteId: Long, application: Application) : AndroidViewModel(application) {
 
     private val notesRepository = NotesRepository(getDatabase(application))
 
@@ -51,16 +32,11 @@ class NoteDetailViewModel(note: Note, application: Application) : AndroidViewMod
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private val _selectedNote = MutableLiveData<Note>()
-
-    @Bindable
-    var selectedNote: LiveData<Note> = _selectedNote
+    val selectedNote: LiveData<Note>
         get() = _selectedNote
-    
-
-
 
     init {
-        _selectedNote.value = note
+        setSelectedNote(noteId)
     }
 
 
@@ -68,12 +44,20 @@ class NoteDetailViewModel(note: Note, application: Application) : AndroidViewMod
     val navigateToNoteList: LiveData<Boolean?>
         get() = _navigateToNoteList
 
+    fun setSelectedNote(noteId: Long) {
+        viewModelScope.launch {
+            _selectedNote.value = notesRepository.getNote(noteId)
+        }
+    }
+
     fun onSave() {
         viewModelScope.launch {
             notesRepository.updateNote(
-                _selectedNote.value!!
+                selectedNote.value!!.asDatabaseNote()
             )
-            Timber.i("Saved")
+            Timber.i("Note saved. id = %d, Title = %s, Body = %s",
+                selectedNote.value!!.id, selectedNote.value!!.title, selectedNote.value!!.body)
+            Timber.i("DatabaseNoteId = %d", selectedNote.value!!.asDatabaseNote().id)
             _navigateToNoteList.value = true
         }
     }
@@ -90,11 +74,11 @@ class NoteDetailViewModel(note: Note, application: Application) : AndroidViewMod
 
 
 
-    class Factory(val note: Note, val app: Application): ViewModelProvider.Factory {
+    class Factory(val noteId: Long, val app: Application): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NoteDetailViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return NoteDetailViewModel(note, app) as T
+                return NoteDetailViewModel(noteId, app) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
