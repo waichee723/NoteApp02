@@ -7,7 +7,7 @@ import com.waichee.noteapp02.domain.Note
 
 @Dao
 interface NoteDao {
-    @Query("select * from notes_table")
+    @Query("select * from notes_table ORDER BY id DESC")
     fun getNotes(): LiveData<List<DatabaseNote>>
 
     @Insert
