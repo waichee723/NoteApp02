@@ -7,7 +7,7 @@ import com.waichee.noteapp02.domain.Note
 @Entity(tableName = "notes_table")
 data class DatabaseNote(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Long = 0L,
     var title: String = "TITLE",
     var body: String = "BODY"
 )

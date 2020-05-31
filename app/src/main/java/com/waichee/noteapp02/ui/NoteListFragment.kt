@@ -33,7 +33,9 @@ class NoteListFragment: Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        binding.noteRecyclerView.adapter = NoteListAdapter()
+        binding.noteRecyclerView.adapter = NoteListAdapter(NoteListAdapter.OnClickListener{
+            viewModel.displayNoteDetail(it)
+        })
 
         viewModel.navigateToNoteDetail.observe(viewLifecycleOwner, Observer {
             if (it != null) {

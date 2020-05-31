@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 data class Note (
     var title: String,
     var body: String,
-    var id: Int
+    var id: Long
 ) : Parcelable
 
 fun Note.asDatabaseNote(): DatabaseNote {

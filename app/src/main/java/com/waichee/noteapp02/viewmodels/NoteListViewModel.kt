@@ -29,8 +29,8 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private val _navigateToNoteDetail = MutableLiveData<Long?>()
-    val navigateToNoteDetail: LiveData<Long?>
+    private val _navigateToNoteDetail = MutableLiveData<Long>()
+    val navigateToNoteDetail: LiveData<Long>
         get() = _navigateToNoteDetail
 
 
@@ -43,6 +43,10 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
 
             _navigateToNoteDetail.value = newNoteId
         }
+    }
+
+    fun displayNoteDetail(noteId: Long) {
+        _navigateToNoteDetail.value = noteId
     }
 
     fun doneNavigateToDetail() {

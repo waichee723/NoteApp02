@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.waichee.noteapp02.databinding.NoteListItemBinding
 import com.waichee.noteapp02.domain.Note
+import com.waichee.noteapp02.generated.callback.OnClickListener
 
-class NoteListAdapter: ListAdapter<Note, NoteListAdapter.ViewHolder>(DiffCallback) {
+class NoteListAdapter(private val onClickListener: OnClickListener): ListAdapter<Note, NoteListAdapter.ViewHolder>(DiffCallback) {
     class ViewHolder(private var binding: NoteListItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(note: Note) {
             binding.note = note
@@ -32,6 +33,13 @@ class NoteListAdapter: ListAdapter<Note, NoteListAdapter.ViewHolder>(DiffCallbac
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(note.id)
+        }
         holder.bind(note)
+    }
+
+    class OnClickListener(val clickListener: (noteId: Long) -> Unit) {
+        fun onClick(noteId: Long) = clickListener(noteId)
     }
 }
