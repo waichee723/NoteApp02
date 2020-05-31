@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.waichee.noteapp02.R
 import com.waichee.noteapp02.databinding.FragmentNoteDetailBinding
+import com.waichee.noteapp02.util.hideKeyboard
 import com.waichee.noteapp02.viewmodels.NoteDetailViewModel
 
 class NoteDetailFragment: Fragment() {
@@ -35,9 +36,9 @@ class NoteDetailFragment: Fragment() {
             if (it != null) {
                 this.findNavController().navigate(NoteDetailFragmentDirections.actionNoteDetailFragmentToNoteListFragment())
                 viewModel.doneNavigateToNoteList()
+                hideKeyboard()
             }
         })
-
 
         return binding.root
     }

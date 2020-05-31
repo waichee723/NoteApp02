@@ -51,13 +51,15 @@ class NoteDetailViewModel(noteId: Long, application: Application) : AndroidViewM
     }
 
     fun onSave() {
+            updateNote()
+    }
+
+
+    fun updateNote() {
         viewModelScope.launch {
             notesRepository.updateNote(
                 selectedNote.value!!.asDatabaseNote()
             )
-            Timber.i("Note saved. id = %d, Title = %s, Body = %s",
-                selectedNote.value!!.id, selectedNote.value!!.title, selectedNote.value!!.body)
-            Timber.i("DatabaseNoteId = %d", selectedNote.value!!.asDatabaseNote().id)
             _navigateToNoteList.value = true
         }
     }
