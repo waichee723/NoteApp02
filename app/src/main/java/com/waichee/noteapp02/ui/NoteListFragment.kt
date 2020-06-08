@@ -2,6 +2,8 @@ package com.waichee.noteapp02.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -45,5 +47,15 @@ class NoteListFragment: Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }
