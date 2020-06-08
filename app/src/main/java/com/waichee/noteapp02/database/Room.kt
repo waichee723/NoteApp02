@@ -21,6 +21,9 @@ interface NoteDao {
 
     @Delete
     fun delete(databaseNote: DatabaseNote)
+
+    @Query("DELETE FROM notes_table")
+    fun deleteAll()
 }
 
 @Database(entities = [DatabaseNote::class], version = 1, exportSchema = false)

@@ -45,4 +45,11 @@ class NotesRepository(private val database: NotesDatabase) {
                 databaseNote.id, databaseNote.title, databaseNote.body)
         }
     }
+
+    suspend fun deleteAllNote() {
+        withContext(Dispatchers.IO) {
+            database.noteDao.deleteAll()
+            Timber.i("All notes deleted")
+        }
+    }
 }

@@ -35,6 +35,8 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
 
 
 
+    // Methods for layout file to access by data binding
+
     fun onNewNote() {
         viewModelScope.launch {
             val newNote = DatabaseNote()
@@ -45,6 +47,14 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
+    fun deleteAllNote() {
+        viewModelScope.launch {
+            notesRepository.deleteAllNote()
+        }
+    }
+
+    // Navigation
+
     fun displayNoteDetail(noteId: Long) {
         _navigateToNoteDetail.value = noteId
     }
@@ -53,10 +63,14 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
         _navigateToNoteDetail.value = null
     }
 
+    // Job
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
+
+    // ViewModel Factory
 
     class Factory(val app: Application): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
