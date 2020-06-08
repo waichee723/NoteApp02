@@ -37,4 +37,12 @@ class NotesRepository(private val database: NotesDatabase) {
             database.noteDao.get(key)
         }
     }
+
+    suspend fun deleteNote(databaseNote: DatabaseNote) {
+        withContext(Dispatchers.IO) {
+            database.noteDao.delete(databaseNote)
+            Timber.i("Note Deleted, id = %d, Title = %s, Body = %s",
+                databaseNote.id, databaseNote.title, databaseNote.body)
+        }
+    }
 }

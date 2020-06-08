@@ -18,6 +18,9 @@ interface NoteDao {
 
     @Query("SELECT * from notes_table WHERE id = :key")
     fun get(key: Long): Note?
+
+    @Delete
+    fun delete(databaseNote: DatabaseNote)
 }
 
 @Database(entities = [DatabaseNote::class], version = 1, exportSchema = false)

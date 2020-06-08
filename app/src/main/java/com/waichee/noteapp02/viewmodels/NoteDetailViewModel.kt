@@ -35,27 +35,38 @@ class NoteDetailViewModel(noteId: Long, application: Application) : AndroidViewM
     val selectedNote: LiveData<Note>
         get() = _selectedNote
 
-    init {
-        setSelectedNote(noteId)
-    }
-
-
     private val _navigateToNoteList = MutableLiveData<Boolean?>()
     val navigateToNoteList: LiveData<Boolean?>
         get() = _navigateToNoteList
 
-    fun setSelectedNote(noteId: Long) {
-        viewModelScope.launch {
-            _selectedNote.value = notesRepository.getNote(noteId)
-        }
+    // Initiation of the ViewModel
+
+    init {
+        setSelectedNote(noteId)
     }
+
+    // Methods for the view to access
 
     fun onSave() {
             updateNote()
     }
 
+    fun onDelete() {
+        deleteNote()
+    }
 
-    fun updateNote() {
+    // Private methods to handle the database operation etc.
+
+    private fun deleteNote() {
+        viewModelScope.launch {
+            notesRepository.deleteNote(
+                selectedNote.value!!.asDatabaseNote()
+            )
+            _navigateToNoteList.value = true
+        }
+    }
+
+    private fun updateNote() {
         viewModelScope.launch {
             notesRepository.updateNote(
                 selectedNote.value!!.asDatabaseNote()
@@ -64,17 +75,22 @@ class NoteDetailViewModel(noteId: Long, application: Application) : AndroidViewM
         }
     }
 
+    private fun setSelectedNote(noteId: Long) {
+        viewModelScope.launch {
+            _selectedNote.value = notesRepository.getNote(noteId)
+        }
+    }
+
+    // Methods to handle navigation
+
     fun doneNavigateToNoteList() {
         _navigateToNoteList.value = null
     }
-
 
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
-
-
 
     class Factory(val noteId: Long, val app: Application): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
