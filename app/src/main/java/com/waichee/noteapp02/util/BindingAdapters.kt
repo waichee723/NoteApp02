@@ -1,5 +1,6 @@
 package com.waichee.noteapp02.util
 
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView

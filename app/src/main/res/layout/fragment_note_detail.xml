@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="Title"/>
+            android:text="@string/title_label"/>
 
         <EditText
             android:id="@+id/noteDetail_title"
@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/noteDetail_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="Body"/>
+            android:text="@string/body_label"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/noteDetail_body"
