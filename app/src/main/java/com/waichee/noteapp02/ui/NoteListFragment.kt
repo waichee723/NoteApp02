@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.waichee.noteapp02.R
 import com.waichee.noteapp02.databinding.FragmentNoteListBinding
 import com.waichee.noteapp02.viewmodels.NoteListViewModel
+import timber.log.Timber
 
 class NoteListFragment: Fragment() {
     private val viewModel: NoteListViewModel by lazy {
@@ -47,8 +48,16 @@ class NoteListFragment: Fragment() {
             }
         })
 
+        viewModel.displayAlert.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                val alertFragment = ConfirmDeleteDialogue.newInstance()
+                alertFragment.show(childFragmentManager, "wow")
+            }
+        })
+
         return binding.root
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)

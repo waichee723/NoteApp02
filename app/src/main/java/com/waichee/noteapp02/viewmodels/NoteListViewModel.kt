@@ -33,6 +33,9 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
     val navigateToNoteDetail: LiveData<Long>
         get() = _navigateToNoteDetail
 
+    private val _displayAlert = MutableLiveData<Boolean>()
+    val displayAlert: LiveData<Boolean>
+        get() = _displayAlert
 
 
     // Methods for layout file to access by data binding
@@ -50,6 +53,7 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
     fun deleteAllNote() {
         viewModelScope.launch {
             notesRepository.deleteAllNote()
+            _displayAlert.value = true
         }
     }
 
@@ -61,6 +65,10 @@ class NoteListViewModel(application: Application): AndroidViewModel(application)
 
     fun doneNavigateToDetail() {
         _navigateToNoteDetail.value = null
+    }
+
+    fun doneDisplayAlert() {
+        _displayAlert.value = null
     }
 
     // Job
