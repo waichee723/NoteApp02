@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.waichee.noteapp02.R
 import com.waichee.noteapp02.databinding.FragmentNoteListBinding
 import com.waichee.noteapp02.viewmodels.NoteListViewModel
+import kotlinx.android.synthetic.main.fragment_note_list.textView_emptyList
 import timber.log.Timber
 
 class NoteListFragment: Fragment() {
@@ -52,6 +53,14 @@ class NoteListFragment: Fragment() {
             if (it != null) {
                 val alertFragment = ConfirmDeleteDialogue.newInstance()
                 alertFragment.show(childFragmentManager, "wow")
+            }
+        })
+
+        viewModel.noteList.observe(viewLifecycleOwner, Observer {
+            if (it.isEmpty()) {
+                textView_emptyList.visibility = View.VISIBLE
+            } else {
+                textView_emptyList.visibility = View.INVISIBLE
             }
         })
 
